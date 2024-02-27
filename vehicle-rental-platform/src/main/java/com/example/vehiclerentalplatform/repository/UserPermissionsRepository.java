@@ -4,7 +4,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.vehiclerentalplatform.model.UserPermissions;
-import java.util.List;
 import com.example.vehiclerentalplatform.security.model.UserEntity;
 
 
