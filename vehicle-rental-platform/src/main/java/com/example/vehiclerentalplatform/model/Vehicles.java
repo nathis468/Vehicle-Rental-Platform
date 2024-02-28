@@ -1,7 +1,10 @@
 package com.example.vehiclerentalplatform.model;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document(collection = "vehicles")
 public class Vehicles {
+    @Id
+    private String Id;
+
     @Field("car_model")
     private String carModel;
 
@@ -42,6 +48,9 @@ public class Vehicles {
     @Field("longitude")
     private String longitude;
 
-    @Filed("booking_details")
-    private List<Bookings> booking_details;
+    @Field("ratings")
+    private String ratings;
+
+    @Field("booking_details")
+    private List<String> booking_details;
 }

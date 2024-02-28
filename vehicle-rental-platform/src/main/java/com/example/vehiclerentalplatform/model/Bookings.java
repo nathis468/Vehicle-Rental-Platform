@@ -1,5 +1,9 @@
 package com.example.vehiclerentalplatform.model;
 
+import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,4 +16,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document(collection = "bookings")
 public class Bookings {
+    @Id
+    private String id;
+
+    @Field("email")
+    private String email;
+
+    @Field("from_date")
+    private Date fromDate;
+
+    @Field("to_date")
+    private Date toDate;
+
+    @Field("price")
+    private String price;
+
+    @Field("status")
+    private String status;
+
+    @Field("vehicle_details")
+    private String vehcileDetails;
 }
