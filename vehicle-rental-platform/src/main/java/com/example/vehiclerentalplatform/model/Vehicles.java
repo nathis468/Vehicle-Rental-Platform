@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Document(collection = "vehicles")
 public class Vehicles {
     @Id
-    private String Id;
+    private String _id;
 
     @Field("car_model")
     private String carModel;
@@ -53,4 +54,7 @@ public class Vehicles {
 
     @Field("booking_details")
     private List<String> booking_details;
+
+    @Field("image")
+    private String image;
 }

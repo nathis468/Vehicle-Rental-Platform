@@ -32,6 +32,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests
                 .requestMatchers(permitAllEndpointList)
                 .permitAll()
+                .requestMatchers("**","statis/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated())
                 .sessionManagement(management -> management

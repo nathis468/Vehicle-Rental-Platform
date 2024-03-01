@@ -1,4 +1,6 @@
-package com.example.vehiclerentalplatform.model;
+package com.example.vehiclerentalplatform.dto;
+
+import com.example.vehiclerentalplatform.model.Vehicles;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,6 @@
-package com.example.vehiclerentalplatform.model;
+package com.example.vehiclerentalplatform.dto;
 
 import java.util.Date;
-import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

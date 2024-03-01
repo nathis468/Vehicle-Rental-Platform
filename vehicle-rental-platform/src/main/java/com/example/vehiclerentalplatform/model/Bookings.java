@@ -17,7 +17,10 @@ import lombok.NoArgsConstructor;
 @Document(collection = "bookings")
 public class Bookings {
     @Id
-    private String id;
+    private String _id;
+
+    @Field("car_model_name")
+    private String carModelName;
 
     @Field("email")
     private String email;
