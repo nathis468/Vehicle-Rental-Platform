@@ -1,6 +1,5 @@
 package com.example.vehiclerentalplatform.security.model;
 
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 

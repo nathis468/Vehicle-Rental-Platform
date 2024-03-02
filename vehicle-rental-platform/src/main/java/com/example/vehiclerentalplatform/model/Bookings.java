@@ -1,7 +1,6 @@
 package com.example.vehiclerentalplatform.model;
 
 import java.util.Date;
-import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -39,4 +38,19 @@ public class Bookings {
 
     @Field("vehicle_details")
     private String vehcileDetails;
+
+    @Field("payment_date")
+    private Date paymentDate;
+
+    @Field("latitude")
+    private String latitude;
+
+    @Field("longitude")
+    private String longitude;
+
+    @Field("payment_id")
+    private String paymentId;
+
+    @Field("currency")
+    private String currency;
 }

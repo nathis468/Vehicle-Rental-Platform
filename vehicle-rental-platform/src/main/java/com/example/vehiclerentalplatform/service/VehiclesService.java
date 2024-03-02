@@ -12,6 +12,8 @@ public interface VehiclesService {
     NearestVehicles getVehicleById(String vehicleId);
     List<NearestVehicles> getFilteredVehicleService(Filters newFilter);
     Vehicles insertNewVehicleService(Vehicles newVehicle);
+    Vehicles updateVehicleService(Vehicles updateVehicle);
     List<NearestVehicles> haversine(Filters newFilter,List<Vehicles> filteredVehicles);
     String imageConvet(MultipartFile file);
+    void deleteVehicleService(Vehicles deleteVehicle);
 }

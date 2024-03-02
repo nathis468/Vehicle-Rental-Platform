@@ -7,11 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.vehiclerentalplatform.dto.Filters;
 import com.example.vehiclerentalplatform.dto.NearestVehicles;
-import com.example.vehiclerentalplatform.dto.NewVehicle;
 import com.example.vehiclerentalplatform.model.Vehicles;
 import com.example.vehiclerentalplatform.service.VehiclesService;
-
-import jakarta.websocket.server.PathParam;
 
 import java.util.Date;
 import java.util.List;
@@ -21,11 +18,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/vehicles")
@@ -39,10 +39,9 @@ public class VehiclesController {
     public ResponseEntity<List<NearestVehicles>> getFilteredController(@RequestParam String latitude,@RequestParam String longitude,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
         Filters newFilter = new Filters();
         newFilter.setLatitude(latitude);
-        newFilter.setLatitude(longitude);
+        newFilter.setLongitude(longitude);
         newFilter.setStartDate(startDate);
         newFilter.setEndDate(endDate);
-        System.out.println(newFilter);
         return new ResponseEntity<>(vehiclesService.getFilteredVehicleService(newFilter),HttpStatus.OK);
     }    
 
@@ -53,10 +52,19 @@ public class VehiclesController {
     
 
     @PostMapping("")
-    public ResponseEntity<Vehicles> insertNewVehicleController(@ModelAttribute Vehicles newVehicle,@RequestParam("file") MultipartFile imagFile)
-    {
+    public ResponseEntity<Vehicles> insertNewVehicleController(@ModelAttribute Vehicles newVehicle,@RequestParam("file") MultipartFile imagFile){
         newVehicle.setImage(vehiclesService.imageConvet(imagFile));
-        // return new ResponseEntity<>(new,HttpStatus.OK);
         return new ResponseEntity<>(vehiclesService.insertNewVehicleService(newVehicle),HttpStatus.OK);
-    }    
+    }  
+    
+    @PutMapping("")
+    public ResponseEntity<Vehicles> updateVehicleController(@RequestBody Vehicles updateVehicle) {
+        return new ResponseEntity<>(vehiclesService.updateVehicleService(updateVehicle),HttpStatus.OK);
+    }
+    
+    @DeleteMapping("")
+    public ResponseEntity<Vehicles> deleteVehicleController(@RequestBody Vehicles deleteVehicle) {
+        vehiclesService.deleteVehicleService(deleteVehicle);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

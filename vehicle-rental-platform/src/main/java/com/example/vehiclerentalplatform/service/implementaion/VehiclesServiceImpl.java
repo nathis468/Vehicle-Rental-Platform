@@ -90,13 +90,17 @@ public class VehiclesServiceImpl implements VehiclesService{
         } 
         Collections.sort(newList, Comparator.comparing(NearestVehicles::getDistance));
 
-        System.out.println(newList);
         return newList;
     }
 
     @Override
     public Vehicles insertNewVehicleService(Vehicles newVehicle) {
         return vehiclesRepo.save(newVehicle);
+    }
+
+    @Override
+    public Vehicles updateVehicleService(Vehicles updateVehicle) {
+        return vehiclesRepo.save(updateVehicle);
     }
 
     @Override
@@ -117,5 +121,10 @@ public class VehiclesServiceImpl implements VehiclesService{
             throw new RuntimeException("Invalid file type");
         }
         return url;
+    }
+
+    @Override
+    public void deleteVehicleService(Vehicles deleteVehicle) {
+        vehiclesRepo.deleteById(deleteVehicle.get_id());
     }
 }

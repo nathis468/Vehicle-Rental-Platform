@@ -85,7 +85,6 @@ public class PermissionUpdateServiceImpl implements PermissionUpdateService{
         for(int i=0;i<up1.getUserPermissions().size();i++){
             al.add(permissionsRepo.findBy_id(up1.getUserPermissions().get(i).get_id()).getPermission());
         }
-
         return al;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.vehiclerentalplatform.model.Bookings;
+import com.example.vehiclerentalplatform.model.PaymentRecord;
 import com.example.vehiclerentalplatform.model.Roles;
 import com.example.vehiclerentalplatform.repository.BookingsRepository;
 import com.example.vehiclerentalplatform.security.model.Role;
@@ -31,4 +32,8 @@ public class BookingsServiceImpl implements BookingsService{
         return bookingsRepo.findAll();
     }
     
+    @Override
+    public Bookings createPaymentRecord(Bookings newRecord){
+        return bookingsRepo.save(newRecord);
+    }
 }
