@@ -8,4 +8,5 @@ import com.example.vehiclerentalplatform.model.PaymentRecord;
 public interface BookingsService {
     List<Bookings> getBookingDetails(String email);
     Bookings createPaymentRecord(Bookings newRecord);
+    void setRatingService(Bookings theBooking,Integer rating);
 }

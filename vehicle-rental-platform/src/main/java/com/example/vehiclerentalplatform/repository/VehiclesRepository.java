@@ -12,5 +12,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 @Repository
 public interface VehiclesRepository extends MongoRepository<Vehicles,String>{
     Optional<Vehicles> findById(String id);
-    List<Vehicles> findByCarModel(String carModel);
+    Vehicles findByCarModel(String carModel);
 }

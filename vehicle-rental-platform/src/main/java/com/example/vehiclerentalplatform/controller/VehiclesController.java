@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.vehiclerentalplatform.dto.Filters;
+import com.example.vehiclerentalplatform.dto.MonthlyIncome;
 import com.example.vehiclerentalplatform.dto.NearestVehicles;
 import com.example.vehiclerentalplatform.model.Vehicles;
 import com.example.vehiclerentalplatform.service.VehiclesService;
@@ -16,6 +17,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,4 +69,16 @@ public class VehiclesController {
         vehiclesService.deleteVehicleService(deleteVehicle);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    @GetMapping("/analytics/yearly")
+    public ResponseEntity<List<MonthlyIncome>> getMonthlyIncome(@RequestParam("carModelName")  String carModelName) {
+        return new ResponseEntity<>(vehiclesService.calculateMonthlyIncome(carModelName),HttpStatus.OK);
+    }
+
+    @GetMapping("/getCarsName")
+    public ResponseEntity<List<String>> getCarNameController() {
+        return new ResponseEntity<>(vehiclesService.getCarsName(),HttpStatus.OK);
+    }
+
 }

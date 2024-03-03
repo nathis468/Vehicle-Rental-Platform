@@ -62,7 +62,7 @@ public class PermissionUpdateServiceImpl implements PermissionUpdateService{
         return rolePermissionsRepo.save(newRolePermissions);
     }
 
-
+    
     @Override
     public UserPermissions addNewUserPermissions(UserPermissions newUserPermissions) {
         return userPermissionsRepo.save(newUserPermissions);

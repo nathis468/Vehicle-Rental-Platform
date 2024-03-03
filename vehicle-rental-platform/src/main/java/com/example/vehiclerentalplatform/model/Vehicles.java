@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.example.vehiclerentalplatform.dto.Ratings;
+
 import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
@@ -49,7 +52,7 @@ public class Vehicles {
     private String longitude;
 
     @Field("ratings")
-    private String ratings;
+    private List<Ratings> ratings;
 
     @Field("booking_details")
     private List<String> booking_details;

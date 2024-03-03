@@ -3,18 +3,25 @@ package com.example.vehiclerentalplatform.service.implementaion;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.vehiclerentalplatform.dao.VehiclesDAO;
 import com.example.vehiclerentalplatform.dto.Filters;
+import com.example.vehiclerentalplatform.dto.MonthlyIncome;
 import com.example.vehiclerentalplatform.dto.NearestVehicles;
+import com.example.vehiclerentalplatform.dto.Ratings;
 import com.example.vehiclerentalplatform.model.Bookings;
 import com.example.vehiclerentalplatform.model.Vehicles;
+import com.example.vehiclerentalplatform.repository.BookingsRepository;
 import com.example.vehiclerentalplatform.repository.VehiclesRepository;
 import com.example.vehiclerentalplatform.service.VehiclesService;
 
@@ -28,6 +35,10 @@ public class VehiclesServiceImpl implements VehiclesService{
 
     @Autowired
     private VehiclesDAO vehiclesDTO;
+
+    @Autowired
+    private BookingsRepository bookingsRepo;
+
 
     @Override
     public NearestVehicles getVehicleById(String vehicleId){
@@ -95,6 +106,9 @@ public class VehiclesServiceImpl implements VehiclesService{
 
     @Override
     public Vehicles insertNewVehicleService(Vehicles newVehicle) {
+        Ratings initialRating = new Ratings();
+        newVehicle.setRatings(new ArrayList<>(Collections.singletonList(initialRating)));
+        System.out.println(newVehicle);
         return vehiclesRepo.save(newVehicle);
     }
 
@@ -127,4 +141,49 @@ public class VehiclesServiceImpl implements VehiclesService{
     public void deleteVehicleService(Vehicles deleteVehicle) {
         vehiclesRepo.deleteById(deleteVehicle.get_id());
     }
+
+
+    @Override
+    public List<MonthlyIncome> calculateMonthlyIncome(String carModelName) {
+        Vehicles vehicle = vehiclesRepo.findByCarModel(carModelName);
+
+        Map<Month, Double> monthlyIncomeMap = new HashMap<>();
+
+        List<String> bookingDetails = vehicle.getBooking_details();
+        if (bookingDetails != null) {
+            for (String bookingId : bookingDetails) {
+                Optional<Bookings> booking = bookingsRepo.findById(bookingId);
+                if (!booking.isEmpty()) {
+                    LocalDate fromDate = booking.get().getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    Month month = fromDate.getMonth();
+                    double price = Double.parseDouble(booking.get().getPrice());
+
+                    monthlyIncomeMap.put(month, monthlyIncomeMap.getOrDefault(month, 0.0) + price);
+                }
+            }
+        }
+
+        for (Month month : Month.values()) {
+            monthlyIncomeMap.putIfAbsent(month, 0.0);
+        }
+
+        return convertToMonthlyIncomeList(monthlyIncomeMap);
+    }
+
+    private List<MonthlyIncome> convertToMonthlyIncomeList(Map<Month, Double> monthlyIncomeMap) {
+        Map<Month, Double> sortedMap = new TreeMap<>(monthlyIncomeMap);
+
+        List<MonthlyIncome> monthlyIncomeList = new ArrayList<>();
+        for (Map.Entry<Month, Double> entry : sortedMap.entrySet()) {
+            MonthlyIncome monthlyIncome = new MonthlyIncome(entry.getKey().toString(), entry.getValue());
+            monthlyIncomeList.add(monthlyIncome);
+        }
+        return monthlyIncomeList;
+    }
+
+    public List<String> getCarsName(){
+        List<String> vehicleModels = vehiclesRepo.findAll().stream().map(Vehicles::getCarModel).collect(Collectors.toList());
+        return vehicleModels;
+    }
+
 }
