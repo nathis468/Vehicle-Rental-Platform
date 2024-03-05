@@ -8,6 +8,6 @@ public class VehicleRentalPlatformApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(VehicleRentalPlatformApplication.class, args);
-	}
+	}	
 
 }

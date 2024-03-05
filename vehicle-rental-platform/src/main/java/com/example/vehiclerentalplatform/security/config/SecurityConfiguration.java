@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests
                 .requestMatchers(permitAllEndpointList)
                 .permitAll()
-                .requestMatchers("**","statis/**")
+                .requestMatchers("**","static/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated())

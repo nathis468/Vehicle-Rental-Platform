@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Document(collection = "bookings")
 public class Bookings {
     @Id
@@ -53,4 +52,11 @@ public class Bookings {
 
     @Field("currency")
     private String currency;
+
+    @Field("booking_date")
+    private Date bookingDate;
+
+    public Bookings(){
+        this.bookingDate = new Date();
+    }
 }

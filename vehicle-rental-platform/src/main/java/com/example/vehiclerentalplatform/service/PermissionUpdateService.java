@@ -2,6 +2,8 @@ package com.example.vehiclerentalplatform.service;
 
 import java.util.List;
 
+import org.apache.catalina.User;
+
 import com.example.vehiclerentalplatform.model.Permissions;
 import com.example.vehiclerentalplatform.model.RolePermissions;
 import com.example.vehiclerentalplatform.model.Roles;

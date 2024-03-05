@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.vehiclerentalplatform.model.Bookings;
-import com.example.vehiclerentalplatform.model.PaymentRecord;
-import com.example.vehiclerentalplatform.model.Roles;
 import com.example.vehiclerentalplatform.model.Vehicles;
 import com.example.vehiclerentalplatform.repository.BookingsRepository;
 import com.example.vehiclerentalplatform.repository.VehiclesRepository;
@@ -30,12 +31,15 @@ public class BookingsServiceImpl implements BookingsService{
     private VehiclesRepository vehiclesRepo;
 
     @Override
-    public List<Bookings> getBookingDetails(String email) {
+    public Page<Bookings> getBookingDetails(String email, int page, int pageSize) {
+
+        PageRequest pageable = PageRequest.of(page-1, pageSize, Sort.by(Sort.Order.desc("bookingDate")));
+
         Optional<UserEntity> user  = userEntityRepo.findByEmail(email);
         if(user.get().getRole().equals(Role.USER)){
-            return bookingsRepo.findByEmail(email);
+            return bookingsRepo.findByEmail(email,pageable);
         }
-        return bookingsRepo.findAll();
+        return bookingsRepo.findAll(pageable);
     }
     
     @Override

@@ -182,7 +182,7 @@ public class VehiclesServiceImpl implements VehiclesService{
     }
 
     public List<String> getCarsName(){
-        List<String> vehicleModels = vehiclesRepo.findAll().stream().map(Vehicles::getCarModel).collect(Collectors.toList());
+        List<String> vehicleModels = vehiclesRepo.findAll().stream().map(Vehicles::getCarModel).sorted().collect(Collectors.toList());
         return vehicleModels;
     }
 

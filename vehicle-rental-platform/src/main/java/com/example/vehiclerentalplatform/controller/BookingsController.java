@@ -3,6 +3,7 @@ package com.example.vehiclerentalplatform.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,8 +30,8 @@ public class BookingsController {
     private BookingsService bookingsService;
 
     @GetMapping("{email}")
-    public ResponseEntity<List<Bookings>> getMethodName(@PathVariable String email) {
-        return new ResponseEntity<>(bookingsService.getBookingDetails(email),HttpStatus.OK);
+    public ResponseEntity<Page<Bookings>> getMethodName(@PathVariable String email, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+        return new ResponseEntity<>(bookingsService.getBookingDetails(email, page, pageSize),HttpStatus.OK);
     }
     
     @PostMapping("")
