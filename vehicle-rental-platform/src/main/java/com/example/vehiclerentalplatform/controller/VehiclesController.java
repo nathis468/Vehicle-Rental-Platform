@@ -10,6 +10,7 @@ import com.example.vehiclerentalplatform.dto.MonthlyIncome;
 import com.example.vehiclerentalplatform.dto.NearestVehicles;
 import com.example.vehiclerentalplatform.model.Vehicles;
 import com.example.vehiclerentalplatform.service.VehiclesService;
+import com.example.vehiclerentalplatform.service.implementaion.VehiclesServiceImpl;
 
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,9 @@ public class VehiclesController {
 
     @Autowired
     private VehiclesService vehiclesService;
+
+    @Autowired
+    private VehiclesServiceImpl vehiclesServiceImpl;
 
     @GetMapping("")
     public ResponseEntity<List<NearestVehicles>> getFilteredController(@RequestParam String latitude,@RequestParam String longitude,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
@@ -70,15 +74,8 @@ public class VehiclesController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    @GetMapping("/analytics/yearly")
-    public ResponseEntity<List<MonthlyIncome>> getMonthlyIncome(@RequestParam("carModelName")  String carModelName) {
-        return new ResponseEntity<>(vehiclesService.calculateMonthlyIncome(carModelName),HttpStatus.OK);
-    }
-
     @GetMapping("/getCarsName")
     public ResponseEntity<List<String>> getCarNameController() {
         return new ResponseEntity<>(vehiclesService.getCarsName(),HttpStatus.OK);
-    }
-
+    }  
 }

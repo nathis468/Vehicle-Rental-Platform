@@ -1,25 +1,27 @@
 package com.example.vehiclerentalplatform.service.implementaion;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.example.vehiclerentalplatform.dto.Users;
-import com.example.vehiclerentalplatform.security.model.UserEntity;
-import com.example.vehiclerentalplatform.security.repository.UserEntityRepository;
+import com.example.vehiclerentalplatform.model.Users;
+import com.example.vehiclerentalplatform.repository.UsersRepository;
 import com.example.vehiclerentalplatform.service.UsersService;
 
 @Service
 public class UsersServiceImpl implements UsersService{
     @Autowired
-    private UserEntityRepository userEntityRepo;
+    private UsersRepository usersRepo;
 
- @Override
-public List<Users> getAllUsers() {
-    return userEntityRepo.findAll().stream().map(userEntity -> new Users(userEntity.getUsername(), userEntity.getEmail()))  .collect(Collectors.toList());
-}
+    @Override
+    public Page<Users> getAllUsers(int page, int pageSize) {
+        return usersRepo.findAll(PageRequest.of(page-1, pageSize));
+    }
+
+    @Override
+    public Users getUserProfile(String email) {
+        return usersRepo.findByEmail(email);
+    }
 
 }

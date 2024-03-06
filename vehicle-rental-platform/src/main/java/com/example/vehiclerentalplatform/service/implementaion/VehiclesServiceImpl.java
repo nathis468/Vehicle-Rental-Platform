@@ -3,20 +3,15 @@ package com.example.vehiclerentalplatform.service.implementaion;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.vehiclerentalplatform.dao.VehiclesDAO;
 import com.example.vehiclerentalplatform.dto.Filters;
-import com.example.vehiclerentalplatform.dto.MonthlyIncome;
 import com.example.vehiclerentalplatform.dto.NearestVehicles;
 import com.example.vehiclerentalplatform.dto.Ratings;
 import com.example.vehiclerentalplatform.model.Bookings;
@@ -28,7 +23,7 @@ import com.example.vehiclerentalplatform.service.VehiclesService;
 @Service
 public class VehiclesServiceImpl implements VehiclesService{
 
-    private static final double EARTH_RADIUS_KM = 6371.0;
+    private static final double EARTH_RADIUS_KM = 6371;
 
     @Autowired
     private VehiclesRepository vehiclesRepo;
@@ -80,18 +75,17 @@ public class VehiclesServiceImpl implements VehiclesService{
         return haversine(newFilter,filteredList2);
     }
 
-
     @Override
     public List<NearestVehicles> haversine(Filters newFilter,List<Vehicles> filteredVehicles) {
         double lat1 = Math.toRadians(Double.parseDouble(newFilter.getLatitude()));
-        double lon1 = Math.toRadians(Double.parseDouble(newFilter.getLongitude()));
+        double lon1 = Double.parseDouble(newFilter.getLongitude());
         List<NearestVehicles> newList = new ArrayList<>();
         for(int i=0;i<filteredVehicles.size();i++){
-            double lat2 = Math.toRadians(Double.parseDouble(filteredVehicles.get(i).getLatitude()));
-            double lon2 = Math.toRadians(Double.parseDouble(filteredVehicles.get(i).getLatitude()));
+            double lat2 = Math.toRadians(filteredVehicles.get(i).getLatitude());
+            double lon2 = filteredVehicles.get(i).getLongitude();
             double dLat = lat2 - lat1;
-            double dLon = lon2 - lon1;
-            double a = Math.sin(dLat / 2.0) * Math.sin(dLat / 2.0) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2.0) * Math.sin(dLon / 2.0);                 
+            double dLon = Math.toRadians(lon2 - lon1);
+            double a = Math.sin(dLat / 2.0) * Math.sin(dLat / 2.0) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2.0) * Math.sin(dLon / 2.0); 
             double c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));
             double distance = EARTH_RADIUS_KM * c;
             NearestVehicles result1 = new NearestVehicles();
@@ -142,44 +136,6 @@ public class VehiclesServiceImpl implements VehiclesService{
         vehiclesRepo.deleteById(deleteVehicle.get_id());
     }
 
-
-    @Override
-    public List<MonthlyIncome> calculateMonthlyIncome(String carModelName) {
-        Vehicles vehicle = vehiclesRepo.findByCarModel(carModelName);
-
-        Map<Month, Double> monthlyIncomeMap = new HashMap<>();
-
-        List<String> bookingDetails = vehicle.getBooking_details();
-        if (bookingDetails != null) {
-            for (String bookingId : bookingDetails) {
-                Optional<Bookings> booking = bookingsRepo.findById(bookingId);
-                if (!booking.isEmpty()) {
-                    LocalDate fromDate = booking.get().getFromDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    Month month = fromDate.getMonth();
-                    double price = Double.parseDouble(booking.get().getPrice());
-
-                    monthlyIncomeMap.put(month, monthlyIncomeMap.getOrDefault(month, 0.0) + price);
-                }
-            }
-        }
-
-        for (Month month : Month.values()) {
-            monthlyIncomeMap.putIfAbsent(month, 0.0);
-        }
-
-        return convertToMonthlyIncomeList(monthlyIncomeMap);
-    }
-
-    private List<MonthlyIncome> convertToMonthlyIncomeList(Map<Month, Double> monthlyIncomeMap) {
-        Map<Month, Double> sortedMap = new TreeMap<>(monthlyIncomeMap);
-
-        List<MonthlyIncome> monthlyIncomeList = new ArrayList<>();
-        for (Map.Entry<Month, Double> entry : sortedMap.entrySet()) {
-            MonthlyIncome monthlyIncome = new MonthlyIncome(entry.getKey().toString(), entry.getValue());
-            monthlyIncomeList.add(monthlyIncome);
-        }
-        return monthlyIncomeList;
-    }
 
     public List<String> getCarsName(){
         List<String> vehicleModels = vehiclesRepo.findAll().stream().map(Vehicles::getCarModel).sorted().collect(Collectors.toList());

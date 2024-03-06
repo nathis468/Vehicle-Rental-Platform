@@ -1,5 +1,6 @@
 package com.example.vehiclerentalplatform.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +16,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Document(collection = "vehicles")
 public class Vehicles {
     @Id
@@ -43,13 +43,13 @@ public class Vehicles {
     private String cancellationPolicy;
 
     @Field("price")
-    private String price;
+    private double price;
 
     @Field("latitude")
-    private String latitude;
+    private double latitude;
 
     @Field("longitude")
-    private String longitude;
+    private double longitude;
 
     @Field("ratings")
     private List<Ratings> ratings;
@@ -59,4 +59,11 @@ public class Vehicles {
 
     @Field("image")
     private String image;
+
+    @Field("maintanance")
+    private List<String> maintanance;
+
+    public Vehicles(){
+        this.maintanance = new ArrayList<>();
+    }
 }

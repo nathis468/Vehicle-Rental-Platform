@@ -1,9 +1,10 @@
 package com.example.vehiclerentalplatform.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
-import com.example.vehiclerentalplatform.dto.Users;
+import com.example.vehiclerentalplatform.model.Users;
 
 public interface UsersService {
-    public List<Users> getAllUsers();
+    Page<Users> getAllUsers(int page, int pageSize);
+    Users getUserProfile(String email);
 }

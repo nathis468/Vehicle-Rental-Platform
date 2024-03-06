@@ -19,10 +19,11 @@ public class UserEntity implements UserDetails{
 
     @Field("user_name")
     private String userName;
+    @Field("email")
     private String email;
     private String password;
-    @Field("contact_number")
-    private String contactNumber;
+    // @Field("contact_number")
+    // private String contactNumber;
     @Field(targetType = FieldType.STRING)
     private Role role;
 
@@ -30,6 +31,7 @@ public class UserEntity implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_"+role.name()));
     }
+    
     @Override
     public String getUsername() {
         return email;            
