@@ -31,15 +31,31 @@ public class BookingsServiceImpl implements BookingsService{
     private VehiclesRepository vehiclesRepo;
 
     @Override
-    public Page<Bookings> getBookingDetails(String email, int page, int pageSize) {
+    public Page<Bookings> getBookingDetails(String email, int page, int pageSize, String searchedValue, String active, String direction) {
 
-        PageRequest pageable = PageRequest.of(page-1, pageSize, Sort.by(Sort.Order.desc("bookingDate")));
+        PageRequest pageable;
+
+        if(!active.equalsIgnoreCase("") && !direction.equalsIgnoreCase("")){
+            if(direction.equalsIgnoreCase("asc")){
+                pageable = PageRequest.of(page-1, pageSize, Sort.by(Sort.Order.asc(active)));
+            }
+            else{
+                pageable = PageRequest.of(page-1, pageSize, Sort.by(Sort.Order.desc(active)));
+            }
+        }
+
+        else{
+            pageable = PageRequest.of(page-1, pageSize, Sort.by(Sort.Order.desc("bookingDate")));
+        }
+
 
         Optional<UserEntity> user  = userEntityRepo.findByEmail(email);
-        if(user.get().getRole().equals(Role.USER)){
-            return bookingsRepo.findByEmail(email,pageable);
+        if(user.get().getRole().equals(Role.USER)){ 
+            Page<Bookings> result = bookingsRepo.findByEmailAndCarModelNameAndEmail(email,searchedValue,pageable);
+            return result;
         }
-        return bookingsRepo.findAll(pageable);
+        Page<Bookings> result2 = bookingsRepo.findByCarModelNameAndEmail(searchedValue, pageable);
+        return result2;
     }
     
     @Override

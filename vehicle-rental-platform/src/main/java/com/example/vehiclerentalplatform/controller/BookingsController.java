@@ -1,7 +1,5 @@
 package com.example.vehiclerentalplatform.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vehiclerentalplatform.model.Bookings;
-import com.example.vehiclerentalplatform.model.PaymentRecord;
 import com.example.vehiclerentalplatform.service.BookingsService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +27,8 @@ public class BookingsController {
     private BookingsService bookingsService;
 
     @GetMapping("{email}")
-    public ResponseEntity<Page<Bookings>> getMethodName(@PathVariable String email, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
-        return new ResponseEntity<>(bookingsService.getBookingDetails(email, page, pageSize),HttpStatus.OK);
+    public ResponseEntity<Page<Bookings>> getMethodName(@PathVariable String email, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize, @RequestParam("searchedValue") String searchedValue, @RequestParam("active") String active, @RequestParam("direction") String direction) {
+        return new ResponseEntity<>(bookingsService.getBookingDetails(email, page, pageSize, searchedValue, active, direction),HttpStatus.OK);
     }
     
     @PostMapping("")
